@@ -31,9 +31,19 @@
 
     <br>
   <div class="w3-container w3-padding-32" id="post_movies">
+        
         <div class="form-group" >
-          <h4>Movie List</h4>  
+          <h4>Movie List</h4>
+          <form class="input-group" action="list.php" method = "post">
+            <input class="form-control" id="keyword" name="keyword">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit" id="search_btn" name="search_btn" style="background-color: black; color: white;">Search</button>
+            </span>
+          </form>
+        <input type="text" id="keyword_value" hidden value="<?php if (isset($_POST["keyword"])) {echo ($_POST["keyword"]);}  else {echo "";} ?>">
+        <br><br>
           <?php 
+            
             $conn = new mysqli("bdwnbi28hhp9zahxpdsx-mysql.services.clever-cloud.com:3306",
             "ummw4mjhoamcz8cdg2nb", "EQXF9glZnb7e1efETasK", "bdwnbi28hhp9zahxpdsx");
 
@@ -42,9 +52,17 @@
                 die("Connection failed: " . $conn->connect_error);
             }
             $count = 0;
-            $result = $conn->query("select * from movies");
+            if (isset($_POST["keyword"])) {
+              $result = $conn->query("select * from movies where name like '%" . $_POST["keyword"] . "%';");
+            } else {
+              $result = $conn->query("select * from movies");
+            }
+            
             if ($result->num_rows > 0) {
               // output data of each row
+              if (isset($_POST["keyword"])) {
+                echo "<text class=\"form-froup\">Search result for: " . $_POST["keyword"] . "</text><br>";
+              }
               echo 
               "<table class=\"table\">
               <thead>
@@ -95,7 +113,7 @@
   
 <!-- End page content -->
 </div>
-<br><br><br><br>
+<br>
 
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-16">
@@ -109,6 +127,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script>
+  $(document).ready(function () {
+    var keyword_value = $('#keyword_value').val();
+    console.log(keyword_value);
+    if (keyword_value) {
+      $("#keyword").val(keyword_value);
+    } else {
+      $("#keyword").val("");
+    } 
+  })
 </script>
 
 </body>
