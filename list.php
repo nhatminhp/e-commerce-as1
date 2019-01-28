@@ -60,7 +60,7 @@
             
             if ($result->num_rows > 0) {
               // output data of each row
-              if (isset($_POST["keyword"])) {
+              if (isset($_POST["keyword"]) && $_POST["keyword"] != "") {
                 echo "<text class=\"form-froup\">Search result for: " . $_POST["keyword"] . "</text><br>";
               }
               echo 
